@@ -1,0 +1,22 @@
+{
+  "name": "zomato-app-with-db",
+  "version": "1.0.0",
+  "description": "zomato backend",
+  "main": "app.js",
+  "scripts": {
+    "server": "node app.js",
+    "start": "nodemon app.js",
+    "client": "npm start --prefix ./react-zomato-app",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "Souvik Roy",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.2",
+    "razorpay": "^2.9.1"
+  }
+}
