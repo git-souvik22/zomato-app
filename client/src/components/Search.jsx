@@ -15,7 +15,7 @@ function Search() {
   let [restaurantList, setRestaurantList] = useState([]);
   let getLocationList = async () => {
     try {
-      let url = "http://localhost:3040/api/get-location-list";
+      let url = "https://zomato-app-tx30.onrender.com/api/get-location-list";
       let response = await axios.get(url);
       let data = response.data;
       setLocations(data.result);
@@ -25,7 +25,7 @@ function Search() {
     }
   };
   let getFilterDetails = async () => {
-    let url = "http://localhost:3040/api/filter";
+    let url = "https://zomato-app-tx30.onrender.com/api/filter";
     let { data } = await axios.post(url, filter);
     setRestaurantList(data.result);
   };
