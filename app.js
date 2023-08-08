@@ -22,7 +22,8 @@ app.use("*", function (req, res) {
 });
 
 const PORT = 3040;
-const MONGO_DB_URI = "mongodb://127.0.0.1:27017/zomatoDB";
+const MONGO_DB_URI =
+  "mongodb+srv://souvik2018roy:7BRMTXpQgwK6mPvI@cluster0.a8clkoy.mongodb.net/zomatoDB";
 mongoose
   .connect(MONGO_DB_URI)
   .then(() => {
