@@ -15,10 +15,10 @@ app.use(express.urlencoded({ extended: false })); // enable form data
 // extended: false ==> will not allow parma or query params
 //add routes
 app.use("/api", AppRouter);
-app.use(express.static(path.join(__dirname, "./react-zomato-app/build")));
+app.use(express.static(path.join(__dirname, "./client/build")));
 
 app.use("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./react-zomato-app/build/index.html"));
+  res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
 const PORT = 3040;
