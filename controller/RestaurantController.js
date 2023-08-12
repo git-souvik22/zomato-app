@@ -35,7 +35,7 @@ const RestaurantController = {
     });
   },
   filter: async (request, response) => {
-    let { location, cuisine } = request.body;
+    let { sort, location, cuisine } = request.body;
     //location
     //cuisine
     //cost for 2
