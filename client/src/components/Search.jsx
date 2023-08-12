@@ -25,7 +25,7 @@ function Search() {
   const fetchProductsByPagination = async () => {
     try {
       const { data } = await axios.get(
-        `https://zomato-app-tx30.onrender.com/api/Pagination`
+        `https://zomato-mern-api.onrender.com/api/Pagination`
       );
       setRestaurantList(data.products);
     } catch (error) {
@@ -66,7 +66,7 @@ function Search() {
   // locationlist functionality
   let getLocationList = async () => {
     try {
-      let url = "https://zomato-app-tx30.onrender.com/api/get-location-list";
+      let url = "https://zomato-mern-api.onrender.com/api/get-location-list";
       let response = await axios.get(url);
       let data = response.data;
       setLocations(data.result);
@@ -82,7 +82,7 @@ function Search() {
 
   // get filtered data functionality
   let getFilterDetails = async () => {
-    let url = "https://zomato-app-tx30.onrender.com/api/filter";
+    let url = "https://zomato-mern-api.onrender.com/api/filter";
     let { data } = await axios.post(url, filter);
     setRestaurantList(data.result);
   };
@@ -132,7 +132,7 @@ function Search() {
 
     try {
       const { data } = await axios.post(
-        `https://zomato-app-tx30.onrender.com/api/filterPrice?priceRange=${selectedRange}`
+        `https://zomato-mern-api.onrender.com/api/filterPrice?priceRange=${selectedRange}`
       );
       setRestaurantList(data.products);
     } catch (error) {

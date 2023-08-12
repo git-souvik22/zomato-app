@@ -12,13 +12,13 @@ function Restaurant() {
   let [totalPrice, setTotalPrice] = useState(0);
   let getRestaurantDetails = async () => {
     let url =
-      "https://zomato-app-tx30.onrender.com/api/get-restaurant-details/" + id;
+      "https://zomato-mern-api.onrender.com/api/get-restaurant-details/" + id;
     let { data } = await axios.get(url);
     setRDetails(data.result);
   };
   let getMenuItemList = async () => {
     let url =
-      "https://zomato-app-tx30.onrender.com/api/get-menu-item-list/" + id;
+      "https://zomato-mern-api.onrender.com/api/get-menu-item-list/" + id;
     let { data } = await axios.get(url);
     setRMenuList(data.result);
   };
@@ -40,7 +40,7 @@ function Restaurant() {
   };
 
   let getPaymentView = async () => {
-    const url = "https://zomato-app-tx30.onrender.com/api/create-order";
+    const url = "https://zomato-mern-api.onrender.com/api/create-order";
     let { data } = await axios.post(url, { amount: totalPrice });
 
     let options = {
@@ -58,7 +58,7 @@ function Restaurant() {
           order_id: response.razorpay_order_id,
           signature: response.razorpay_signature,
         };
-        let url = "https://zomato-app-tx30.onrender.com/api/verify-payment";
+        let url = "https://zomato-mern-api.onrender.com/api/verify-payment";
         await axios.post(url, sendData);
       },
       prefill: {
