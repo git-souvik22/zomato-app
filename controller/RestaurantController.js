@@ -35,7 +35,7 @@ const RestaurantController = {
     });
   },
   filter: async (request, response) => {
-    let { sort, location, cuisine } = request.body;
+    let { location, cuisine } = request.body;
     //location
     //cuisine
     //cost for 2
@@ -46,9 +46,7 @@ const RestaurantController = {
     if (location !== undefined) filterData["location_id"] = location;
     if (cuisine.length !== 0) filterData["cuisine_id"] = { $in: cuisine };
 
-    let result = await RestaurantModel.find(filterData).sort({
-      min_price: sort,
-    });
+    let result = await RestaurantModel.find(filterData);
     response.send({
       call: true,
       result,
