@@ -24,6 +24,10 @@ AppRouter.post("/login", UserController.userLogin);
 
 AppRouter.post("/filter", RestaurantController.filter);
 
+AppRouter.post("/filterPrice", RestaurantController.filterPrice);
+
+AppRouter.get("/Pagination", RestaurantController.Pagination);
+
 AppRouter.post("/create-order", PaymentController.createOrder);
 AppRouter.post("/verify-payment", PaymentController.verifyPayment);
 

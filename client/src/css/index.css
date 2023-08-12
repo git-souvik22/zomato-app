@@ -137,6 +137,11 @@
   border: 2px solid gray;
   margin: 0 2px;
 }
+
+.active-btn{
+  background-color: rgb(118, 114, 114);
+}
+
 /* search page end */
 
 /* iphone SE */

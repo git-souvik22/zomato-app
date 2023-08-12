@@ -12,7 +12,58 @@ function Search() {
     cuisine: [],
   });
   let [locations, setLocations] = useState([]);
+  const [, setSelectedPriceRange] = useState(null);
+
+  // pagination states
   let [restaurantList, setRestaurantList] = useState([]);
+
+  const [pageData, setPageData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+
+  // pagination function
+  const fetchProductsByPagination = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://zomato-app-tx30.onrender.com/api/Pagination`
+      );
+      setRestaurantList(data.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (page === 1) return page;
+    setPage(page - 1);
+  };
+
+  const handleNextPage = () => {
+    if (page === pageCount) return page;
+    setPage(page + 1);
+  };
+
+  useEffect(() => {
+    fetchProductsByPagination();
+    // eslint-disable-next-line
+  }, [page]);
+
+  useEffect(() => {
+    const pagedatacount = Math.ceil(restaurantList.length / 2);
+    setPageCount(pagedatacount);
+
+    if (page) {
+      const limit = 2;
+      const skip = limit * page;
+      const dataSkip = restaurantList.slice(
+        page === 1 ? 0 : skip - limit,
+        skip
+      );
+      setPageData(dataSkip);
+    }
+  }, [restaurantList, page]);
+
+  // locationlist functionality
   let getLocationList = async () => {
     try {
       let url = "https://zomato-app-tx30.onrender.com/api/get-location-list";
@@ -24,6 +75,12 @@ function Search() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getLocationList();
+  }, []);
+
+  // get filtered data functionality
   let getFilterDetails = async () => {
     let url = "https://zomato-app-tx30.onrender.com/api/filter";
     let { data } = await axios.post(url, filter);
@@ -64,12 +121,24 @@ function Search() {
   };
 
   useEffect(() => {
-    getLocationList();
-  });
-  useEffect(() => {
     getFilterDetails();
     // eslint-disable-next-line
   }, [filter]);
+
+  // filter Price radio buttons
+  const handlePriceRangeChange = async (event) => {
+    const selectedRange = event.target.value;
+    setSelectedPriceRange(selectedRange);
+
+    try {
+      const { data } = await axios.post(
+        `https://zomato-app-tx30.onrender.com/api/filterPrice?priceRange=${selectedRange}`
+      );
+      setRestaurantList(data.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   return (
     <>
@@ -172,36 +241,44 @@ function Search() {
                 </div>
               </div>
               <p className="mt-4 mb-2 fw-bold">Cost For Two</p>
-              <div>
+              <div className="d-flex flex-column">
                 <div className="ms-1">
-                  <input type="radio" className="form-check-input" />
-                  <label htmlFor="" className="form-check-label ms-1">
-                    less then 500
+                  <input
+                    type="radio"
+                    value="0-500"
+                    name="rad"
+                    onChange={handlePriceRangeChange}
+                  />
+                  <label className="form-check-label ms-1">Rs 0 - 500</label>
+                </div>
+                <div className="ms-1">
+                  <input
+                    type="radio"
+                    value="500-1000"
+                    name="rad"
+                    onChange={handlePriceRangeChange}
+                  />
+                  <label className="form-check-label ms-1">Rs 500 - 1000</label>
+                </div>
+                <div className="ms-1">
+                  <input
+                    type="radio"
+                    value="1000-1500"
+                    name="rad"
+                    onChange={handlePriceRangeChange}
+                  />
+                  <label className="form-check-label ms-1">
+                    Rs 1000 - 1500
                   </label>
                 </div>
                 <div className="ms-1">
-                  <input type="radio" className="form-check-input" />
-                  <label htmlFor="" className="form-check-label ms-1">
-                    500 to 1000
-                  </label>
-                </div>
-                <div className="ms-1">
-                  <input type="radio" className="form-check-input" />
-                  <label htmlFor="" className="form-check-label ms-1">
-                    1000 to 1500
-                  </label>
-                </div>
-                <div className="ms-1">
-                  <input type="radio" className="form-check-input" />
-                  <label htmlFor="" className="form-check-label ms-1">
-                    1500 to 2000
-                  </label>
-                </div>
-                <div className="ms-1">
-                  <input type="radio" className="form-check-input" />
-                  <label htmlFor="" className="form-check-label ms-1">
-                    2000+
-                  </label>
+                  <input
+                    type="radio"
+                    value="2000+"
+                    name="rad"
+                    onChange={handlePriceRangeChange}
+                  />
+                  <label className="form-check-label ms-1">Rs 2000+</label>
                 </div>
               </div>
               <p className="mt-4 mb-2 fw-bold">Sort</p>
@@ -236,69 +313,119 @@ function Search() {
           </div>
           {/* <!-- search result --> */}
           <div className="col-12 col-lg-8 col-md-7">
-            {restaurantList.map((restaurant, index) => {
-              return (
-                <div
-                  key={restaurant._id}
-                  className="col-12 food-shadow p-4 mb-4"
-                  onClick={() =>
-                    navigate("/restaurant-details/" + restaurant._id)
-                  }
-                >
-                  <div className="d-flex align-items-center">
-                    <img
-                      src={"/images/" + restaurant.image}
-                      className="food-item"
-                      alt=""
-                    />
-                    <div className="ms-5">
-                      <p className="h4 fw-bold">{restaurant.name}</p>
-                      <span className="fw-bold text-muted">
-                        {restaurant.locality}
-                      </span>
-                      <p className="m-0 text-muted">
-                        <i
-                          className="fa fa-map-marker fa-2x text-danger"
-                          aria-hidden="true"
-                        ></i>
-                        {restaurant.locality}, {restaurant.city}
-                      </p>
+            {pageData.length > 0 ? (
+              pageData.map((restaurant, index) => {
+                return (
+                  <div
+                    key={restaurant._id}
+                    className="col-12 food-shadow p-4 mb-4"
+                    onClick={() =>
+                      navigate("/restaurant-details/" + restaurant._id)
+                    }
+                  >
+                    <div className="d-flex align-items-center">
+                      <img
+                        src={"/images/" + restaurant.image}
+                        className="food-item"
+                        alt=""
+                      />
+                      <div className="ms-5">
+                        <p className="h4 fw-bold">{restaurant.name}</p>
+                        <span className="fw-bold text-muted">
+                          {restaurant.locality}
+                        </span>
+                        <p className="m-0 text-muted">
+                          <i
+                            className="fa fa-map-marker fa-2x text-danger"
+                            aria-hidden="true"
+                          ></i>
+                          {restaurant.locality}, {restaurant.city}
+                        </p>
+                      </div>
+                    </div>
+                    <hr />
+                    <div className="d-flex">
+                      <div>
+                        <p className="m-0">CUISINES:</p>
+                        <p className="m-0">COST FOR TWO:</p>
+                      </div>
+                      <div className="ms-5">
+                        <p className="m-0 fw-bold">
+                          {restaurant.cuisine
+                            .map((cuisine) => {
+                              return cuisine.name;
+                            })
+                            .join(", ")}
+                        </p>
+                        <p className="m-0 fw-bold">
+                          <i className="fa fa-inr" aria-hidden="true"></i>
+                          {restaurant.min_price}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <hr />
-                  <div className="d-flex">
-                    <div>
-                      <p className="m-0">CUISINES:</p>
-                      <p className="m-0">COST FOR TWO:</p>
-                    </div>
-                    <div className="ms-5">
-                      <p className="m-0 fw-bold">
-                        {restaurant.cuisine
-                          .map((cuisine) => {
-                            return cuisine.name;
-                          })
-                          .join(", ")}
-                      </p>
-                      <p className="m-0 fw-bold">
-                        <i className="fa fa-inr" aria-hidden="true"></i>
-                        {restaurant.min_price}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            ) : (
+              <div className="fs-2 fw-bold text-secondary">Loading...</div>
+            )}
+          </div>
+          {/* pagination */}
+          <div className="col-12 d-flex justify-content-center mb-4">
+            <span className="fs-5 fw-semibold">Page - {page}</span>
+            <button
+              onClick={handlePrevPage}
+              style={{
+                width: "30px",
+                height: "30px",
+                marginLeft: "10px",
+                marginRight: "10px",
+              }}
+              disabled={page === 1}
+            >
+              &lt;
+            </button>
 
-            <div className="col-12 pagination d-flex justify-content-center">
-              <ul className="pages">
-                <li>&lt;</li>
-                <li className="active">1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>&gt;</li>
-              </ul>
-            </div>
+            {Array(pageCount)
+              .fill(null)
+              .map((element, index) => {
+                return (
+                  <div>
+                    <button
+                      type="button"
+                      className={
+                        "mx-3" +
+                        `${
+                          page === index + 1
+                            ? "btn rounded-2 mx-2 active-btn"
+                            : "btn rounded-2 mx-2"
+                        }`
+                      }
+                      style={{
+                        width: "30px",
+                        height: "30px",
+                      }}
+                      key={index}
+                      onClick={() => setPage(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  </div>
+                );
+              })}
+
+            <button
+              onClick={handleNextPage}
+              style={{
+                width: "30px",
+                height: "30px",
+                marginLeft: "10px",
+                marginRight: "10px",
+              }}
+              disabled={page === pageCount}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>
