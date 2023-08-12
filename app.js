@@ -3,7 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const AppRouter = require("./routes/AppRoutes");
-const path = require("path");
 
 // enable cors
 app.use(cors());
@@ -15,11 +14,6 @@ app.use(express.urlencoded({ extended: false })); // enable form data
 // extended: false ==> will not allow parma or query params
 //add routes
 app.use("/api", AppRouter);
-app.use(express.static(path.join(__dirname, "./client/build")));
-
-app.use("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
-});
 
 const PORT = 3040;
 const MONGO_DB_URI =
