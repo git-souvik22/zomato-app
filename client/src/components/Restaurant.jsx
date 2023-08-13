@@ -44,11 +44,11 @@ function Restaurant() {
     let { data } = await axios.post(url, { amount: totalPrice });
 
     let options = {
-      key: "rzp_test_RB0WElnRLezVJ5", // Enter the Key ID generated from the Dashboard
+      key: "rzp_test_nGl9jjtQ4stHfK", // Enter the Key ID generated from the Dashboard
       amount: totalPrice * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
       name: "Zomato App",
-      description: "Make Your Now",
+      description: "Make Your Order Now",
       image:
         "https://i.pinimg.com/originals/1a/17/ed/1a17ed134ffeb3461f5d0f3ca0ee227d.png",
       order_id: data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -62,9 +62,9 @@ function Restaurant() {
         await axios.post(url, sendData);
       },
       prefill: {
-        name: "",
-        email: "",
-        contact: "",
+        name: "Souvik Roy",
+        email: "souvikDeveloperroy@gmail.com",
+        contact: "7660916000",
       },
     };
     var rzp1 = new window.Razorpay(options);

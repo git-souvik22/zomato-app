@@ -1,7 +1,7 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const KEY_ID = "rzp_test_RB0WElnRLezVJ5";
-const KEY_SECRET = "VLMCIrqKxRMNR9EcRcbL2UG8";
+const KEY_ID = "rzp_test_nGl9jjtQ4stHfK";
+const KEY_SECRET = "nvcHMqjK9jzX1oB0QRCfpWvs";
 let instance = new Razorpay({
   key_id: KEY_ID,
   key_secret: KEY_SECRET,
